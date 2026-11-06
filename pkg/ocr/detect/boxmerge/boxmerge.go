@@ -3,6 +3,7 @@ package boxmerge
 import (
 	"fmt"
 	"image"
+	"log"
 
 	"github.com/multippt/gopaddleocr/pkg/ocr/common"
 	"github.com/multippt/gopaddleocr/pkg/ocr/detect"
@@ -73,8 +74,10 @@ func (m *Model) Init(configSrc common.ConfigSource) error {
 
 	switch m.config.Strategy {
 	case Hierarchical:
+		log.Println("Hierarchical")
 		m.strategy = NewHierarchicalMergeStrategy(m.config, m.parentDetector, m.childDetector)
 	case Proximity:
+		log.Println("Proximity")
 		m.strategy = NewProximityMergeStrategy(m.config, m.childDetector)
 	default:
 		return fmt.Errorf("boxmerge: unknown strategy %d", m.config.Strategy)

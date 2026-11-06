@@ -35,6 +35,11 @@ func NewModel() *Model {
 	return m
 }
 
+func (m *Model) SetSessionOptions(SessionOptions *ort.SessionOptions) *Model {
+	m.SessionOptions = SessionOptions
+	return m
+}
+
 func (m *Model) GetName() string { return ModelName }
 
 func (m *Model) GetDefaultConfig() common.ModelConfig {
@@ -46,7 +51,8 @@ func (m *Model) GetDefaultConfig() common.ModelConfig {
 		Std:       [3]float64{0.229, 0.224, 0.225},
 		BaseModelConfig: common.BaseModelConfig{
 			OnnxConfig: common.Config{
-				ModelPath: "PP-LCNet_x1_0_textline_ori.onnx",
+				ModelPath: "PP-LCNet_x1_0_textline_ori_infer.onnx",
+				Options:   m.SessionOptions,
 			},
 		},
 	}

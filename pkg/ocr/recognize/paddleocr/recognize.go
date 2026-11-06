@@ -42,6 +42,11 @@ func NewModel() *Model {
 	return m
 }
 
+func (m *Model) SetSessionOptions(SessionOptions *ort.SessionOptions) *Model {
+	m.SessionOptions = SessionOptions
+	return m
+}
+
 func (m *Model) GetName() string { return ModelName }
 
 func (m *Model) GetDefaultConfig() common.ModelConfig {
@@ -51,7 +56,8 @@ func (m *Model) GetDefaultConfig() common.ModelConfig {
 		Std:    [3]float64{0.5, 0.5, 0.5},
 		BaseModelConfig: common.BaseModelConfig{
 			OnnxConfig: common.Config{
-				ModelPath: "PP-OCRv5_server_rec.onnx",
+				ModelPath: "ch_PP-OCRv5_rec_mobile.onnx",
+				Options:   m.SessionOptions,
 			},
 		},
 	}

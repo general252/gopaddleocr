@@ -13,6 +13,8 @@ type OnnxModel struct {
 
 	session *ort.DynamicAdvancedSession
 	config  ModelConfig
+
+	SessionOptions *ort.SessionOptions
 }
 
 func NewOnnxModel(impl Model) *OnnxModel {

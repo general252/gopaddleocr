@@ -15,8 +15,8 @@ const ModelName = "pp-doclayoutv3"
 type ModelConfig struct {
 	InputSize      int     // default 800
 	ScoreThreshold float32 // default 0.3
-	Mean [3]float32
-	Std  [3]float32
+	Mean           [3]float32
+	Std            [3]float32
 	common.BaseModelConfig
 }
 
@@ -34,17 +34,23 @@ func NewModel() *Model {
 	return m
 }
 
+func (m *Model) SetSessionOptions(SessionOptions *ort.SessionOptions) *Model {
+	m.SessionOptions = SessionOptions
+	return m
+}
+
 func (m *Model) GetName() string { return ModelName }
 
 func (m *Model) GetDefaultConfig() common.ModelConfig {
 	return &ModelConfig{
 		InputSize:      800,
 		ScoreThreshold: 0.3,
-		Mean: [3]float32{0.485, 0.456, 0.406},
-		Std:  [3]float32{0.229, 0.224, 0.225},
+		Mean:           [3]float32{0.485, 0.456, 0.406},
+		Std:            [3]float32{0.229, 0.224, 0.225},
 		BaseModelConfig: common.BaseModelConfig{
 			OnnxConfig: common.Config{
 				ModelPath: "PP-DocLayoutV3.onnx",
+				Options:   m.SessionOptions,
 			},
 		},
 	}

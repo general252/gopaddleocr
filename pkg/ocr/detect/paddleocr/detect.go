@@ -3,7 +3,9 @@ package paddleocr
 import (
 	"fmt"
 	"image"
+	"log"
 	"math"
+	"time"
 
 	"github.com/multippt/gopaddleocr/pkg/ocr/common"
 	"github.com/multippt/gopaddleocr/pkg/ocr/utils"
@@ -38,6 +40,11 @@ func NewModel() *Model {
 	return m
 }
 
+func (m *Model) SetSessionOptions(SessionOptions *ort.SessionOptions) *Model {
+	m.SessionOptions = SessionOptions
+	return m
+}
+
 func (m *Model) GetName() string { return ModelName }
 
 func (m *Model) GetDefaultConfig() common.ModelConfig {
@@ -51,7 +58,8 @@ func (m *Model) GetDefaultConfig() common.ModelConfig {
 		MinArea:         16,
 		BaseModelConfig: common.BaseModelConfig{
 			OnnxConfig: common.Config{
-				ModelPath: "PP-OCRv5_server_det.onnx",
+				ModelPath: "ch_PP-OCRv5_det_mobile.onnx",
+				Options:   m.SessionOptions,
 			},
 		},
 	}
@@ -148,9 +156,12 @@ func (m *Model) Detect(img image.Image) ([]utils.Box, error) {
 	}()
 
 	outputs := make([]ort.Value, 1)
+
+	start := time.Now()
 	if err := m.GetSession().Run([]ort.Value{inTensor}, outputs); err != nil {
 		return nil, fmt.Errorf("det inference: %w", err)
 	}
+	log.Printf("det inference time: %v", time.Since(start))
 	outTensor, ok := outputs[0].(*ort.Tensor[float32])
 	if !ok {
 		_ = outputs[0].Destroy()
